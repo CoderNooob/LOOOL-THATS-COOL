@@ -9,8 +9,11 @@ function preload()
 
 function setup()
 {
-    canvas = createCanvas(640, 420);
+    canvas = createCanvas(380, 380);
     canvas.center();
+    video = createCapture(VIDEO);
+    video.size(380,380);
+    video.hide();
     objectDetector = ml5.objectDetector("cocossd", Pain);
     document.getElementById("status").innerHTML = "Status : Detecting 9 Year Old Idiots";
 }
@@ -19,7 +22,7 @@ function Pain()
 {
     console.log("Model Loadex!");
     stotus = true;
-    objectDetector.detect(img, gotResult);
+    objectDetector.detect(video, gotResult);
 }
 function gotResult(error,results)
 {
@@ -34,18 +37,23 @@ function gotResult(error,results)
 
 function draw()
 {
-    image(img, 0, 0, 640, 420);
+    image(video, 0, 0, 380, 380);
    if(stotus != "")
    {
+    r =  random(255);
+    g =  random(255);
+    b =  random(255);
+    objectDetector.detect(video, gotResult)
        for (i = 0; i < objects.length; i++)
        {
             document.getElementById("status").innerHTML = "Status : Object AHHHH";
-
-            fill("#FF0000");
-            percent = floor(objects[i].confidence *100);
+            document.getElementById("number_of_objects").innerHTML = "Number Of Detections : "+objects.length;
+            
+            fill(r,g,b);
+            percent = floor(objects[i].confidence *140);
             text(objects[i].label + " " + percent + "%", objects[i].x + 15, objects[i].y + 15);
             noFill();
-            stroke("#FF0000");
+            stroke(r,g,b);
             rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height);
        }
    }
